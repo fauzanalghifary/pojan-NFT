@@ -19,6 +19,7 @@ export default function Card({collection, navigation}) {
         onPress={() =>
           navigation.navigate('Detail', {
             external_id: collection.external_id,
+            numOfToken: collection.numOfToken,
           })
         }>
         <Image style={styles.image} source={{uri: collection.image_url}} />
@@ -28,6 +29,7 @@ export default function Card({collection, navigation}) {
         onPress={() =>
           navigation.navigate('Detail', {
             external_id: collection.external_id,
+            numOfToken: collection.numOfToken,
           })
         }>
         <Text>Details</Text>

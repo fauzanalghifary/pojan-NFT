@@ -18,70 +18,47 @@ const HomeScreen = ({navigation}) => {
   const [collectionList, setCollectionList] = useState([]);
   const [collectionIdList, setCollectionIdList] = useState([]);
 
-  const getAllTokens = async () => {
-    const response = await axios.get(`${baseUrl}/jlEsLB/wallet_content`);
-    setTokensCollections(response.data);
+  const getAllTokens = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios.get(`${baseUrl}/jlEsLB/wallet_content`);
+        setTokensCollections(response.data);
 
-    // for (const token of tokenCollections) {
-    //   const parsingCollection = JSON.parse(token.collection_json);
+        collectionList.forEach(col => {
+          col.numOfToken = 0;
+        });
 
-    //   if (!collectionIdList.includes(parsingCollection.id)) {
-    //     const oldIdCollections = collectionIdList;
-    //     oldIdCollections.push(parsingCollection.id);
-    //     setCollectionIdList(oldIdCollections);
+        tokenCollections.forEach(token => {
+          const parsingCollection = JSON.parse(token.collection_json);
 
-    //     const oldCollections = collectionList;
-    //     oldCollections.push(parsingCollection);
-    //     setCollectionList(oldCollections);
-    //   }
-    // }
+          if (!collectionIdList.includes(parsingCollection.id)) {
+            const oldIdCollections = collectionIdList;
+            oldIdCollections.push(parsingCollection.id);
+            setCollectionIdList(oldIdCollections);
 
-    const thePromise = await Promise.all(
-      tokenCollections.map(async token => {
-        const parsingCollection = JSON.parse(token.collection_json);
-
-        if (!collectionIdList.includes(parsingCollection.id)) {
-          const oldIdCollections = collectionIdList;
-          oldIdCollections.push(parsingCollection.id);
-          setCollectionIdList(oldIdCollections);
-
-          const oldCollections = collectionList;
-          oldCollections.push(parsingCollection);
-          setCollectionList(oldCollections);
-        }
-      }),
-    );
-
-    console.log(thePromise);
-
-    // tokenCollections.forEach(token => {
-    //   const parsingCollection = JSON.parse(token.collection_json);
-
-    //   if (!collectionIdList.includes(parsingCollection.id)) {
-    //     const oldIdCollections = collectionIdList;
-    //     oldIdCollections.push(parsingCollection.id);
-    //     setCollectionIdList(oldIdCollections);
-
-    //     const oldCollections = collectionList;
-    //     oldCollections.push(parsingCollection);
-    //     setCollectionList(oldCollections);
-    //   }
-    // });
-
-    // INI MASIH HARDCODE. TODO
-    if (collectionList.length === 3) {
-      setIsLoadingFinish(true);
-    }
+            const oldCollections = collectionList;
+            parsingCollection.numOfToken = 1;
+            oldCollections.push(parsingCollection);
+            setCollectionList(oldCollections);
+          } else {
+            const indexOf = collectionIdList.indexOf(parsingCollection.id);
+            const oldCollections = collectionList;
+            oldCollections[indexOf].numOfToken += 1;
+            setCollectionList(oldCollections);
+          }
+        });
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
   };
 
-  console.log(isLoadingFinish);
   useEffect(() => {
-    getAllTokens();
-  }, [collectionList, isLoadingFinish]);
-
-  const renderItem = ({item}) => (
-    <Card navigation={navigation} collection={item} />
-  );
+    getAllTokens().then(() => {
+      setIsLoadingFinish(true);
+    });
+  }, [collectionList.length, tokenCollections.length, isLoadingFinish]);
 
   if (!isLoadingFinish) {
     return (
@@ -90,6 +67,10 @@ const HomeScreen = ({navigation}) => {
       </SafeAreaView>
     );
   }
+
+  const renderItem = ({item}) => (
+    <Card navigation={navigation} collection={item} />
+  );
 
   return (
     <View style={styles.sectionContainer}>

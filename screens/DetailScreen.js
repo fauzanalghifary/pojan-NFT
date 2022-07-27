@@ -19,7 +19,7 @@ import MyText from '../components/MyText';
 
 const DetailScreen = ({route}) => {
   var win = Dimensions.get('window');
-  const {external_id} = route.params;
+  const {external_id, numOfToken} = route.params;
   const baseUrl = `https://api-generator.retool.com`;
   const [collectionDetail, setCollectionDetail] = useState({});
   const [collectionStats, setCollectionStats] = useState([]);
@@ -52,7 +52,7 @@ const DetailScreen = ({route}) => {
     }
   };
 
-  console.log(collectionDetail);
+  // console.log(collectionDetail);
 
   useEffect(() => {
     getCollectionDetailAndStats();
@@ -87,7 +87,7 @@ const DetailScreen = ({route}) => {
       <View style={styles.infoContainer}>
         <View style={styles.infoChild}>
           <Text style={styles.infoTextTitle}>Items</Text>
-          <Text style={styles.infoTextContent}>13.1</Text>
+          <Text style={styles.infoTextContent}>{numOfToken}</Text>
         </View>
         <View style={styles.infoChild}>
           <Text style={styles.infoTextTitle}>TOTAL VOLUME</Text>
