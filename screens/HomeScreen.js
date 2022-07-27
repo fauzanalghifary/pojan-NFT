@@ -79,11 +79,11 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.sectionContainer}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        numColumns={3}
+        numColumns={1}
         data={collectionList}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-        contentContainerStyle={{paddingBottom: 400}}
+        contentContainerStyle={{paddingBottom: 20}}
       />
     </View>
   );
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: `white`,
   },
   loadingContainer: {
     flex: 1,

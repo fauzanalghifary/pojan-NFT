@@ -18,7 +18,7 @@ import Chart from '../components/Chart';
 import TokenCard from '../components/TokenCard';
 
 const DetailScreen = ({route}) => {
-  var win = Dimensions.get('window');
+  const win = Dimensions.get('window');
   const {external_id, numOfToken, tokens} = route.params;
   const baseUrl = `https://api-generator.retool.com`;
   const [collectionDetail, setCollectionDetail] = useState({});
