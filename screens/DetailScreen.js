@@ -97,7 +97,15 @@ const DetailScreen = ({route}) => {
         </View>
         <View style={styles.infoChild}>
           <Text style={styles.infoTextTitle}>1 DAY</Text>
-          <Text style={styles.infoTextContent}>1.5%</Text>
+          {collectionDetail.one_day_change > 0 ? (
+            <Text style={[styles.infoTextContent, {color: '#1DE273'}]}>
+              ▲{Number(collectionDetail.one_day_change).toFixed(2)}%
+            </Text>
+          ) : (
+            <Text style={[styles.infoTextContent, {color: '#DD2822'}]}>
+              ▼{Number(collectionDetail.one_day_change).toFixed(2)}%
+            </Text>
+          )}
         </View>
       </View>
     </SafeAreaView>
