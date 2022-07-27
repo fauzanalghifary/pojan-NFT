@@ -10,15 +10,19 @@ const Chart = ({stats}) => {
 
   const [floorPriceData, setFloorPriceData] = useState([]);
   const [isLoadingFinish, setIsLoadingFinish] = useState(false);
+  const [numOfDays, setNumOfDays] = useState(30);
+
+  const changeDays = val => {
+    setNumOfDays(val);
+  };
 
   useEffect(() => {
     setFloorPriceData([]);
     stats.forEach(stat => {
       setFloorPriceData(current => [Number(stat.floor_price_eth), ...current]);
     });
-
     setIsLoadingFinish(true);
-  }, [isLoadingFinish]);
+  }, [isLoadingFinish, numOfDays]);
 
   const chartConfig = {
     backgroundGradientFrom: 'white',
@@ -54,14 +58,14 @@ const Chart = ({stats}) => {
                 </Text>
               </View>
               {floorPriceData[floorPriceData.length - 1] -
-                floorPriceData[floorPriceData.length - 30] >
+                floorPriceData[floorPriceData.length - numOfDays] >
               0 ? (
                 <Text style={{color: '#1DE273'}}>
                   ▲
                   {Number(
                     ((floorPriceData[floorPriceData.length - 1] -
-                      floorPriceData[floorPriceData.length - 30]) /
-                      floorPriceData[floorPriceData.length - 30]) *
+                      floorPriceData[floorPriceData.length - numOfDays]) /
+                      floorPriceData[floorPriceData.length - numOfDays]) *
                       100,
                   ).toFixed(2)}
                   %
@@ -70,24 +74,39 @@ const Chart = ({stats}) => {
                 <Text style={{color: '#DD2822'}}>
                   ▼
                   {Number(
-                    ((floorPriceData[floorPriceData.length - 30] -
+                    ((floorPriceData[floorPriceData.length - numOfDays] -
                       floorPriceData[floorPriceData.length - 1]) /
-                      floorPriceData[floorPriceData.length - 30]) *
+                      floorPriceData[floorPriceData.length - numOfDays]) *
                       100,
                   ).toFixed(2)}
                   %
                 </Text>
               )}
             </View>
-            <View>
-              <Text style={styles.daysContainer}>30 days</Text>
+            <View style={styles.numOfDaysContainer}>
+              <Text
+                onPress={() => changeDays(7)}
+                style={[
+                  styles.daysContainer,
+                  numOfDays === 7 ? styles.activeDays : null,
+                ]}>
+                7 days
+              </Text>
+              <Text
+                onPress={() => changeDays(30)}
+                style={[
+                  styles.daysContainer,
+                  numOfDays === 30 ? styles.activeDays : null,
+                ]}>
+                30 days
+              </Text>
             </View>
           </View>
           <LineChart
             data={{
               datasets: [
                 {
-                  data: floorPriceData.slice(-30),
+                  data: floorPriceData.slice(-numOfDays),
                 },
               ],
             }}
@@ -120,6 +139,11 @@ const styles = StyleSheet.create({
   chartHeaderLeft: {
     alignItems: 'flex-end',
   },
+  numOfDaysContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
   daysContainer: {
     backgroundColor: 'skyblue',
     color: 'black',
@@ -127,6 +151,11 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 10,
     textAlign: 'center',
+    marginLeft: 10,
+  },
+  activeDays: {
+    color: 'white',
+    backgroundColor: 'rgba(0, 23, 88, 1)',
   },
   ethereumContainer: {
     flexDirection: 'row',
@@ -136,6 +165,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 30,
   },
+
   chart: {
     paddingVertical: 4,
     marginVertical: 8,
