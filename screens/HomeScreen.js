@@ -12,14 +12,14 @@ import axios from 'axios';
 import Card from '../components/Card';
 
 const HomeScreen = ({navigation}) => {
-  const baseUrl = `https://api-generator.retool.com/jlEsLB/`;
+  const baseUrl = `https://api-generator.retool.com`;
   const [tokenCollections, setTokensCollections] = useState([]);
   const [isLoadingFinish, setIsLoadingFinish] = useState(false);
   const [collectionList, setCollectionList] = useState([]);
   const [collectionIdList, setCollectionIdList] = useState([]);
 
   const getAllTokens = async () => {
-    const response = await axios.get(`${baseUrl}/wallet_content`);
+    const response = await axios.get(`${baseUrl}/jlEsLB/wallet_content`);
     setTokensCollections(response.data);
 
     tokenCollections.forEach(token => {

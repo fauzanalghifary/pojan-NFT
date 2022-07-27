@@ -8,10 +8,9 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-import {log} from 'react-native-reanimated';
 
 export default function Card({collection, navigation}) {
-  console.log(collection.id);
+  //   console.log(collection.id);
 
   return (
     <View style={styles.card}>
@@ -19,7 +18,7 @@ export default function Card({collection, navigation}) {
         underlayColor="none"
         onPress={() =>
           navigation.navigate('Detail', {
-            id: collection.id,
+            external_id: collection.external_id,
           })
         }>
         <Image style={styles.image} source={{uri: collection.image_url}} />
@@ -28,7 +27,7 @@ export default function Card({collection, navigation}) {
         style={styles.button}
         onPress={() =>
           navigation.navigate('Detail', {
-            id: collection.id,
+            external_id: collection.external_id,
           })
         }>
         <Text>Details</Text>
