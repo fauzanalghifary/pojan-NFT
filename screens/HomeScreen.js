@@ -22,19 +22,51 @@ const HomeScreen = ({navigation}) => {
     const response = await axios.get(`${baseUrl}/jlEsLB/wallet_content`);
     setTokensCollections(response.data);
 
-    tokenCollections.forEach(token => {
-      const parsingCollection = JSON.parse(token.collection_json);
+    // for (const token of tokenCollections) {
+    //   const parsingCollection = JSON.parse(token.collection_json);
 
-      if (!collectionIdList.includes(parsingCollection.id)) {
-        const oldIdCollections = collectionIdList;
-        oldIdCollections.push(parsingCollection.id);
-        setCollectionIdList(oldIdCollections);
+    //   if (!collectionIdList.includes(parsingCollection.id)) {
+    //     const oldIdCollections = collectionIdList;
+    //     oldIdCollections.push(parsingCollection.id);
+    //     setCollectionIdList(oldIdCollections);
 
-        const oldCollections = collectionList;
-        oldCollections.push(parsingCollection);
-        setCollectionList(oldCollections);
-      }
-    });
+    //     const oldCollections = collectionList;
+    //     oldCollections.push(parsingCollection);
+    //     setCollectionList(oldCollections);
+    //   }
+    // }
+
+    const thePromise = await Promise.all(
+      tokenCollections.map(async token => {
+        const parsingCollection = JSON.parse(token.collection_json);
+
+        if (!collectionIdList.includes(parsingCollection.id)) {
+          const oldIdCollections = collectionIdList;
+          oldIdCollections.push(parsingCollection.id);
+          setCollectionIdList(oldIdCollections);
+
+          const oldCollections = collectionList;
+          oldCollections.push(parsingCollection);
+          setCollectionList(oldCollections);
+        }
+      }),
+    );
+
+    console.log(thePromise);
+
+    // tokenCollections.forEach(token => {
+    //   const parsingCollection = JSON.parse(token.collection_json);
+
+    //   if (!collectionIdList.includes(parsingCollection.id)) {
+    //     const oldIdCollections = collectionIdList;
+    //     oldIdCollections.push(parsingCollection.id);
+    //     setCollectionIdList(oldIdCollections);
+
+    //     const oldCollections = collectionList;
+    //     oldCollections.push(parsingCollection);
+    //     setCollectionList(oldCollections);
+    //   }
+    // });
 
     // INI MASIH HARDCODE. TODO
     if (collectionList.length === 3) {
@@ -42,14 +74,22 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
-  //   console.log(collectionList[0], isLoadingFinish);
+  console.log(isLoadingFinish);
   useEffect(() => {
     getAllTokens();
-  }, [collectionList]);
+  }, [collectionList, isLoadingFinish]);
 
   const renderItem = ({item}) => (
     <Card navigation={navigation} collection={item} />
   );
+
+  if (!isLoadingFinish) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={{color: 'black'}}>Loading ...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <View style={styles.sectionContainer}>
@@ -67,6 +107,11 @@ const HomeScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
