@@ -60,6 +60,8 @@ const DetailScreen = ({route}) => {
     );
   }
 
+  //
+
   const renderItem = ({item}) => <TokenCard token={item} />;
 
   return (
