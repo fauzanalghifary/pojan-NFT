@@ -4,7 +4,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faGem} from '@fortawesome/free-solid-svg-icons/faGem';
 
 export default function TokenCardCircle({token}) {
-  console.log(token);
   return (
     <View style={styles.card}>
       <Image style={styles.image} source={{uri: token.image_url}} />
