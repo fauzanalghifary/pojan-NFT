@@ -10,8 +10,6 @@ import {
 } from 'react-native';
 
 export default function Card({collection, navigation}) {
-  //   console.log(collection.id);
-
   return (
     <View style={styles.card}>
       <TouchableHighlight

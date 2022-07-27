@@ -14,8 +14,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import axios from 'axios';
-import Spinner from '../assets/spinner.gif';
-import MyText from '../components/MyText';
+import Chart from '../components/Chart';
 
 const DetailScreen = ({route}) => {
   var win = Dimensions.get('window');
@@ -52,8 +51,6 @@ const DetailScreen = ({route}) => {
     }
   };
 
-  // console.log(collectionDetail);
-
   useEffect(() => {
     getCollectionDetailAndStats();
   }, []);
@@ -86,7 +83,7 @@ const DetailScreen = ({route}) => {
       </View>
       <View style={styles.infoContainer}>
         <View style={styles.infoChild}>
-          <Text style={styles.infoTextTitle}>Items</Text>
+          <Text style={styles.infoTextTitle}>ITEMS</Text>
           <Text style={styles.infoTextContent}>{numOfToken}</Text>
         </View>
         <View style={styles.infoChild}>
@@ -108,6 +105,9 @@ const DetailScreen = ({route}) => {
           )}
         </View>
       </View>
+      <View style={styles.chartContainer}>
+        <Chart stats={collectionStats} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     overflow: 'hidden',
+    backgroundColor: 'white',
   },
   loadingContainer: {
     flex: 1,
@@ -186,6 +187,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'black',
     fontWeight: '500',
+  },
+  chartContainer: {
+    marginTop: 25,
   },
 });
 
