@@ -3,7 +3,7 @@ import {Dimensions} from 'react-native';
 import {StyleSheet, Text, View} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faMugSaucer} from '@fortawesome/free-solid-svg-icons/faMugSaucer';
+import {faEthereum} from '@fortawesome/free-brands-svg-icons/faEthereum';
 
 const Chart = ({stats}) => {
   var win = Dimensions.get('window');
@@ -22,7 +22,7 @@ const Chart = ({stats}) => {
     setIsLoadingFinish(true);
   }, [isLoadingFinish]);
 
-  console.log(floorPriceData.length);
+  console.log(floorPriceData);
 
   const chartConfig = {
     backgroundGradientFrom: 'white',
@@ -50,13 +50,38 @@ const Chart = ({stats}) => {
       {isLoadingFinish ? (
         <>
           <View style={styles.chartHeader}>
-            <View>
-              <Text>
-                {' '}
-                <FontAwesomeIcon icon={faMugSaucer} />
-              </Text>
-              <Text style={{color: 'black'}}>⟠ 15.12</Text>
-              <Text style={{color: 'black'}}>20%</Text>
+            <View style={styles.chartHeaderLeft}>
+              <View style={styles.ethereumContainer}>
+                <FontAwesomeIcon icon={faEthereum} size={30} />
+                <Text style={styles.floorPrice}>
+                  {Number(floorPriceData[floorPriceData.length - 1]).toFixed(2)}
+                </Text>
+              </View>
+              {floorPriceData[floorPriceData.length - 1] -
+                floorPriceData[floorPriceData.length - 30] >
+              0 ? (
+                <Text style={{color: '#1DE273'}}>
+                  ▲
+                  {Number(
+                    ((floorPriceData[floorPriceData.length - 1] -
+                      floorPriceData[floorPriceData.length - 30]) /
+                      floorPriceData[floorPriceData.length - 30]) *
+                      100,
+                  ).toFixed(2)}
+                  %
+                </Text>
+              ) : (
+                <Text style={{color: '#DD2822'}}>
+                  ▼
+                  {Number(
+                    ((floorPriceData[floorPriceData.length - 30] -
+                      floorPriceData[floorPriceData.length - 1]) /
+                      floorPriceData[floorPriceData.length - 30]) *
+                      100,
+                  ).toFixed(2)}
+                  %
+                </Text>
+              )}
             </View>
             <View>
               <Text style={styles.daysContainer}>30 days</Text>
@@ -96,6 +121,10 @@ const styles = StyleSheet.create({
   chartHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 15,
+  },
+  chartHeaderLeft: {
+    alignItems: 'flex-end',
   },
   daysContainer: {
     backgroundColor: 'skyblue',
@@ -104,6 +133,14 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 10,
     textAlign: 'center',
+  },
+  ethereumContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  floorPrice: {
+    color: 'black',
+    fontSize: 30,
   },
   chart: {
     paddingVertical: 4,
