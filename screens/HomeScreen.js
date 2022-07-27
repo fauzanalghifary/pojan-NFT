@@ -9,8 +9,9 @@ import {
   FlatList,
 } from 'react-native';
 import axios from 'axios';
+import Card from '../components/Card';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const baseUrl = `https://api-generator.retool.com/jlEsLB/`;
   const [tokenCollections, setTokensCollections] = useState([]);
   const [isLoadingFinish, setIsLoadingFinish] = useState(false);
@@ -35,18 +36,23 @@ const HomeScreen = () => {
       }
     });
 
-    setIsLoadingFinish(true);
+    // INI MASIH HARDCODE. TODO
+    if (collectionList.length === 3) {
+      setIsLoadingFinish(true);
+    }
   };
 
-  console.log(collectionList.length);
+  //   console.log(collectionList[0], isLoadingFinish);
   useEffect(() => {
     getAllTokens();
-  }, []);
+  }, [collectionList]);
 
-  const renderItem = ({item}) => <Text>{item.name}</Text>;
+  const renderItem = ({item}) => (
+    <Card navigation={navigation} collection={item} />
+  );
 
   return (
-    <View>
+    <View style={styles.sectionContainer}>
       <FlatList
         showsVerticalScrollIndicator={false}
         numColumns={3}
@@ -61,8 +67,9 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
