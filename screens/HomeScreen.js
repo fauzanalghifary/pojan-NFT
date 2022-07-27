@@ -26,6 +26,7 @@ const HomeScreen = ({navigation}) => {
 
         collectionList.forEach(col => {
           col.numOfToken = 0;
+          col.tokens = [];
         });
 
         tokenCollections.forEach(token => {
@@ -38,12 +39,14 @@ const HomeScreen = ({navigation}) => {
 
             const oldCollections = collectionList;
             parsingCollection.numOfToken = 1;
+            parsingCollection.tokens = [];
             oldCollections.push(parsingCollection);
             setCollectionList(oldCollections);
           } else {
             const indexOf = collectionIdList.indexOf(parsingCollection.id);
             const oldCollections = collectionList;
             oldCollections[indexOf].numOfToken += 1;
+            oldCollections[indexOf].tokens.push(token);
             setCollectionList(oldCollections);
           }
         });

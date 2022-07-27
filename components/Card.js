@@ -18,6 +18,7 @@ export default function Card({collection, navigation}) {
           navigation.navigate('Detail', {
             external_id: collection.external_id,
             numOfToken: collection.numOfToken,
+            tokens: collection.tokens,
           })
         }>
         <Image style={styles.image} source={{uri: collection.image_url}} />
@@ -28,6 +29,7 @@ export default function Card({collection, navigation}) {
           navigation.navigate('Detail', {
             external_id: collection.external_id,
             numOfToken: collection.numOfToken,
+            tokens: collection.tokens,
           })
         }>
         <Text>Details</Text>

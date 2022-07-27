@@ -15,10 +15,11 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import Chart from '../components/Chart';
+import TokenCard from '../components/TokenCard';
 
 const DetailScreen = ({route}) => {
   var win = Dimensions.get('window');
-  const {external_id, numOfToken} = route.params;
+  const {external_id, numOfToken, tokens} = route.params;
   const baseUrl = `https://api-generator.retool.com`;
   const [collectionDetail, setCollectionDetail] = useState({});
   const [collectionStats, setCollectionStats] = useState([]);
@@ -27,24 +28,20 @@ const DetailScreen = ({route}) => {
   const getCollectionDetailAndStats = async () => {
     try {
       const response = await axios.get(`${baseUrl}/j3Iz08/collections`);
-      // console.log(response.data);
       const targetCollection = response.data.filter(
         col => col.external_id === external_id,
       );
-      // console.log(targetCollection[0].id);
+      const id = targetCollection[0].id;
 
-      const response2 = await axios.get(
-        `${baseUrl}/j3Iz08/collections/${targetCollection[0].id}`,
+      const {data: dataCollectionDetail} = await axios.get(
+        `${baseUrl}/j3Iz08/collections/${id}`,
       );
+      setCollectionDetail(dataCollectionDetail);
 
-      // console.log(response2.data);
-      setCollectionDetail(response2.data);
-
-      const response3 = await axios.get(
-        `${baseUrl}/ELI42D/collection_stats?collection_id=${targetCollection[0].id}`,
+      const {data: dataCollectionStats} = await axios.get(
+        `${baseUrl}/ELI42D/collection_stats?collection_id=${id}`,
       );
-
-      setCollectionStats(response3.data);
+      setCollectionStats(dataCollectionStats);
       setIsLoadingFinish(true);
     } catch (err) {
       console.log(err);
@@ -62,6 +59,8 @@ const DetailScreen = ({route}) => {
       </SafeAreaView>
     );
   }
+
+  const renderItem = ({item}) => <TokenCard token={item} />;
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -107,6 +106,16 @@ const DetailScreen = ({route}) => {
       </View>
       <View style={styles.chartContainer}>
         <Chart stats={collectionStats} />
+      </View>
+      <View style={styles.tokenContainer}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={tokens}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          columnWrapperStyle={{justifyContent: 'center'}}
+        />
       </View>
     </SafeAreaView>
   );
@@ -190,6 +199,12 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     marginTop: 25,
+    marginBottom: -20,
+  },
+  tokenContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

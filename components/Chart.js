@@ -7,11 +7,9 @@ import {faEthereum} from '@fortawesome/free-brands-svg-icons/faEthereum';
 
 const Chart = ({stats}) => {
   var win = Dimensions.get('window');
-  //   console.log(stats);
 
   const [floorPriceData, setFloorPriceData] = useState([]);
   const [isLoadingFinish, setIsLoadingFinish] = useState(false);
-  const [arrayKosong, setarrayKosong] = useState([]);
 
   useEffect(() => {
     setFloorPriceData([]);
@@ -21,8 +19,6 @@ const Chart = ({stats}) => {
 
     setIsLoadingFinish(true);
   }, [isLoadingFinish]);
-
-  console.log(floorPriceData);
 
   const chartConfig = {
     backgroundGradientFrom: 'white',
@@ -111,8 +107,6 @@ const Chart = ({stats}) => {
           />
         </>
       ) : null}
-
-      <Text>INI CHART</Text>
     </>
   );
 };
