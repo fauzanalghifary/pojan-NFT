@@ -15,6 +15,7 @@ const HomeScreen = ({navigation}) => {
   const baseUrl = `https://api-generator.retool.com`;
   const [tokenCollections, setTokensCollections] = useState([]);
   const [isLoadingFinish, setIsLoadingFinish] = useState(false);
+  const [isSomethingWrong, setIsSomethingWrong] = useState(false);
   const [collectionList, setCollectionList] = useState([]);
   const [collectionIdList, setCollectionIdList] = useState([]);
 
@@ -58,10 +59,27 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    getAllTokens().then(() => {
-      setIsLoadingFinish(true);
-    });
-  }, [collectionList.length, tokenCollections.length, isLoadingFinish]);
+    getAllTokens()
+      .then(() => {
+        setIsLoadingFinish(true);
+      })
+      .catch(err => {
+        setIsSomethingWrong(true);
+      });
+  }, [
+    collectionList.length,
+    tokenCollections.length,
+    isLoadingFinish,
+    isSomethingWrong,
+  ]);
+
+  if (isSomethingWrong) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={{color: 'black'}}>Sorry, something gone wrong ...</Text>
+      </SafeAreaView>
+    );
+  }
 
   if (!isLoadingFinish) {
     return (

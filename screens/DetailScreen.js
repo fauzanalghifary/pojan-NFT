@@ -24,6 +24,7 @@ const DetailScreen = ({route}) => {
   const [collectionDetail, setCollectionDetail] = useState({});
   const [collectionStats, setCollectionStats] = useState([]);
   const [isLoadingFinish, setIsLoadingFinish] = useState(false);
+  const [isSomethingWrong, setIsSomethingWrong] = useState(false);
 
   const getCollectionDetailAndStats = async () => {
     try {
@@ -44,13 +45,21 @@ const DetailScreen = ({route}) => {
       setCollectionStats(dataCollectionStats);
       setIsLoadingFinish(true);
     } catch (err) {
-      console.log(err);
+      setIsSomethingWrong(true);
     }
   };
 
   useEffect(() => {
     getCollectionDetailAndStats();
-  }, []);
+  }, [isLoadingFinish, isSomethingWrong]);
+
+  if (isSomethingWrong) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text style={{color: 'black'}}>Sorry, something gone wrong ...</Text>
+      </SafeAreaView>
+    );
+  }
 
   if (!isLoadingFinish) {
     return (
